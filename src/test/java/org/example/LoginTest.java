@@ -5,6 +5,7 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.example.helpers.CourierActions;
 import org.example.pojo.Courier;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,6 +30,11 @@ public class LoginTest {
         courier.setPassword("pass_" + new Random().nextInt(1000));
     }
 
+    @AfterEach
+    public void tearDown() {
+        courierActions.deleteCourier(courier);
+    }
+
     @Test
     @DisplayName("Успешный вход")
     public void loginCourier(){
@@ -39,8 +45,6 @@ public class LoginTest {
         response.then().statusCode(200)
                 .and()
                 .assertThat().body("id", notNullValue());
-
-        courierActions.deleteCourier(courier);
     }
 
     @Test
@@ -58,7 +62,6 @@ public class LoginTest {
                 .assertThat().body("message", equalTo("Недостаточно данных для входа"));
 
         courier.setLogin(courierLogin);
-        courierActions.deleteCourier(courier);
     }
 
     @Test
@@ -76,7 +79,6 @@ public class LoginTest {
                 .assertThat().body("message", equalTo("Недостаточно данных для входа"));
 
         courier.setPassword(courierPassword);
-        courierActions.deleteCourier(courier);
     }
 
     @Test
@@ -94,7 +96,6 @@ public class LoginTest {
                 .assertThat().body("message", equalTo("Учетная запись не найдена"));
 
         courier.setLogin(courierLogin);
-        courierActions.deleteCourier(courier);
     }
 
     @Test
@@ -112,7 +113,6 @@ public class LoginTest {
                 .assertThat().body("message", equalTo("Учетная запись не найдена"));
 
         courier.setPassword(courierPassword);
-        courierActions.deleteCourier(courier);
     }
 
     @Test

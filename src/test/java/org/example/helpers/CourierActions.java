@@ -34,19 +34,16 @@ public class CourierActions {
     @Step("Удалить курьера")
     public void deleteCourier(Courier courier){
         String courierId = null;
-        try {
-            Response response = loginCourier(courier);
+        Response response = loginCourier(courier);
+        if (response.getStatusCode() == 200) {
             courierId = response.jsonPath().getString("id");
-        } finally {
-            if (courierId != null) {
-                given()
-                        .header("Content-type", "application/json")
-                        .body("{ \"id\": \"" + courierId + "\" }")
-                        .when()
-                        .delete(endpointDeleteCourier, courierId)
-                        .then()
-                        .statusCode(200);
-            }
+        }
+        if (courierId != null) {
+            given()
+                    .header("Content-type", "application/json")
+                    .body("{ \"id\": \"" + courierId + "\" }")
+                    .when()
+                    .delete(endpointDeleteCourier, courierId);
         }
     }
 }

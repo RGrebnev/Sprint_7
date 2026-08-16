@@ -5,6 +5,7 @@ import org.example.helpers.CourierActions;
 import org.example.pojo.Courier;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,6 +29,11 @@ public class CreateCourierTest {
         courier.setFirstName("name_" + new Random().nextInt(1000));
     }
 
+    @AfterEach
+    public void tearDown() {
+        courierActions.deleteCourier(courier);
+    }
+
     @Test
     @DisplayName("Создание нового курьера")
     public void createNewCourier(){
@@ -37,8 +43,6 @@ public class CreateCourierTest {
                 .statusCode(201)
                 .and()
                 .assertThat().body("ok", equalTo(true));
-
-        courierActions.deleteCourier(courier);
     }
 
     @Test
@@ -53,8 +57,6 @@ public class CreateCourierTest {
                         .statusCode(409)
                         .and()
                         .assertThat().body("message", equalTo("Этот логин уже используется. Попробуйте другой."));
-
-        courierActions.deleteCourier(courier);
     }
 
     @Test
@@ -94,8 +96,6 @@ public class CreateCourierTest {
                 .statusCode(201)
                 .and()
                 .assertThat().body("ok", equalTo(true));
-
-        courierActions.deleteCourier(courier);
     }
 
 
